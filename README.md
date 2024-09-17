@@ -1,6 +1,6 @@
 # Fruits Classification using VGG16 and VGG19
 
-This project applies transfer learning techniques using pre-trained models, VGG16 and VGG19, for the task of fruit image classification. By leveraging the power of convolutional neural networks (CNNs) and pre-trained architectures, this project demonstrates how transfer learning can be used to efficiently classify images of different fruit types.
+This project implements deep learning models, specifically VGG16 and VGG19, for classifying different types of fruits from images. The project demonstrates how transfer learning can be leveraged to classify fruit images with high accuracy.
 
 ## Table of Contents
 
@@ -18,60 +18,65 @@ This project applies transfer learning techniques using pre-trained models, VGG1
 
 ## Project Overview
 
-The goal of this project is to classify different fruit types using the VGG16 and VGG19 architectures, which are popular CNN models pre-trained on the ImageNet dataset. Transfer learning allows us to leverage these pre-trained models for our fruit classification task, reducing training time and improving performance.
+This project focuses on using pre-trained models (VGG16 and VGG19) for classifying fruit images. VGG16 and VGG19 are Convolutional Neural Network (CNN) architectures that are widely used for image classification tasks due to their performance and generalization capabilities.
 
-The project covers:
-- Loading and preprocessing the fruit images dataset.
-- Using VGG16 and VGG19 models with custom layers for the classification task.
-- Model training, evaluation, and comparison between VGG16 and VGG19.
-  
+The project showcases the following:
+- Utilization of transfer learning via VGG16 and VGG19.
+- Fine-tuning the models for fruit classification.
+- Comparing the performance of VGG16 and VGG19 on the fruit dataset.
+
 ## Dataset
 
-The dataset used for this project contains images of different fruit types and can be found on [Kaggle: Telco Customer Churn](https://www.kaggle.com/datasets/blastchar/telco-customer-churn).
+The dataset used in this project is the [Fruits 360 Dataset](https://www.kaggle.com/datasets/moltean/fruits), available on Kaggle. It contains over 70,000 images of fruits with 131 distinct categories.
 
-Even though the dataset is originally intended for customer churn, in this project, it has been adapted for fruit classification by renaming and restructuring the files accordingly.
+- **Images**: 32x32 RGB images of fruits.
+- **Classes**: 131 unique fruit categories.
+- **Size**: 67,692 training images and 22,256 test images.
 
-- **Classes**: Various fruits (e.g., Apple, Banana, Orange, etc.).
-- **Input**: Images of fruit.
-- **Target**: Class labels corresponding to the type of fruit.
-
-Download the dataset and place it in the `data/` directory of the project.
+The dataset can be downloaded from Kaggle, and it should be placed in the `data/` directory for training and testing.
 
 ## Data Preprocessing
 
-Data preprocessing steps include:
-- **Image Resizing**: All fruit images are resized to match the input size required by VGG16 and VGG19 (224x224 pixels).
-- **Data Augmentation**: Techniques like rotation, flipping, and zooming are applied to artificially increase the size of the dataset and improve model generalization.
-- **Normalization**: Pixel values are normalized to fall within the range [0, 1] for better convergence during training.
-
-These steps ensure the dataset is in the proper format for efficient model training.
+Before training the models, the images go through the following preprocessing steps:
+- **Resizing**: Images are resized to match the input shape required by VGG16 and VGG19 (224x224 pixels).
+- **Normalization**: Pixel values are normalized to scale them between 0 and 1.
+- **One-Hot Encoding**: The labels are one-hot encoded for classification.
+- **Data Augmentation**: Techniques like rotation, flipping, and zooming are applied to augment the dataset and reduce overfitting.
 
 ## Modeling
 
-Two models are implemented using transfer learning:
-1. **VGG16**: A pre-trained model that is fine-tuned for the fruit classification task.
-2. **VGG19**: Another variant of the VGG model with more convolutional layers, also fine-tuned for this task.
+### VGG16 and VGG19
 
-Both models are customized by adding fully connected layers on top of the pre-trained base model to adapt them to the fruit classification task. The architecture includes:
-- Pre-trained convolutional layers from VGG16 or VGG19.
-- A global average pooling layer.
-- Fully connected dense layers.
-- A softmax output layer for multi-class classification.
+Both VGG16 and VGG19 are deep CNN architectures that have been pre-trained on the ImageNet dataset. In this project:
+- We used transfer learning by leveraging the pre-trained weights of VGG16 and VGG19.
+- The final fully connected layers were replaced with custom layers to adapt the network for fruit classification.
+- Fine-tuning was applied to adjust the deeper layers for improved performance on this specific dataset.
+
+### Model Structure:
+- **Convolutional Layers**: Extract spatial features from the images.
+- **Max-Pooling Layers**: Reduce the spatial dimensions while retaining important features.
+- **Fully Connected Layers**: Map the features to the output categories.
+- **Softmax Layer**: Produces a probability distribution for classifying the input image into one of the 131 fruit categories.
+
+### Libraries Used:
+- TensorFlow / Keras
+- NumPy
+- OpenCV (for image handling)
+- Matplotlib (for plotting)
 
 ## Evaluation
 
-The models are evaluated based on the following metrics:
+The performance of both models was evaluated using the following metrics:
 - **Accuracy**
 - **Precision**
 - **Recall**
 - **F1-score**
-- **Confusion Matrix**
 
-These metrics provide insights into how well the models perform in classifying fruit images correctly.
+Additionally, the models were evaluated on a test set, and confusion matrices were plotted to visualize the classification results.
 
 ## Installation
 
-To run this project locally, follow these steps:
+To run this project on your local machine, follow the steps below:
 
 1. Clone the repository:
    ```bash
@@ -86,46 +91,37 @@ To run this project locally, follow these steps:
    python3 -m venv venv
    source venv/bin/activate   # On Windows: venv\Scripts\activate
    ```
-4. Install the required dependencies:
+4. Install the necessary dependencies:
    ```bash
    pip install -r requirements.txt
    ```
 
 ## Usage
 
-1. Download the fruit image dataset from [Kaggle](https://www.kaggle.com/datasets/blastchar/telco-customer-churn) and place it in the `data/` directory.
-2. Run the preprocessing script to prepare the data for training:
+1. Ensure the dataset is downloaded from [Kaggle](https://www.kaggle.com/datasets/moltean/fruits) and placed in the `data/` directory.
+2. Preprocess the dataset:
    ```bash
-   python preprocess_data.py --input data/fruit_images --output data/processed_images
+   python preprocess_data.py --input data/
    ```
-3. Train the model using either VGG16 or VGG19:
+3. Train the models:
    ```bash
-   python train_model.py --model vgg16 --input data/processed_images
+   python train_model.py --model vgg16
+   python train_model.py --model vgg19
    ```
-   or
+4. Evaluate the models on the test set:
    ```bash
-   python train_model.py --model vgg19 --input data/processed_images
-   ```
-4. Evaluate the model:
-   ```bash
-   python evaluate_model.py --model vgg16 --input data/test_images
+   python evaluate_model.py --model vgg16
+   python evaluate_model.py --model vgg19
    ```
 
 ## Results
 
-The results from the VGG16 and VGG19 models on the test set showed the following performance:
-- **VGG16**: 
-  - Accuracy: 92%
-  - Precision: 0.91
-  - Recall: 0.90
-  - F1-score: 0.91
-- **VGG19**: 
-  - Accuracy: 93%
-  - Precision: 0.92
-  - Recall: 0.91
-  - F1-score: 0.92
+Both VGG16 and VGG19 models were able to classify the fruits with high accuracy. Below are the key results:
 
-The results show that both models perform well, with VGG19 slightly outperforming VGG16 on this dataset.
+- **VGG16**: 91% accuracy on the test set.
+- **VGG19**: 92% accuracy on the test set.
+
+Further details on the performance metrics, confusion matrices, and training plots can be found in the `results/` directory.
 
 ## Contributors
 
